@@ -1,0 +1,57 @@
+services:
+  s3:
+    image: rustfs/rustfs:latest
+    container_name: rustfs
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    # environment:
+      # RUSTFS_ADDRESS: ":9000"
+      # RUSTFS_CONSOLE_ADDRESS: ":9001"
+      # RUSTFS_CONSOLE_ENABLE: true
+      # RUSTFS_OBS_LOGGER_LEVEL: "error"
+      # RUSTFS_OBS_LOG_DIRECTORY: "/var/log/rustfs/"
+    command: server /data --console-address ":9001"
+    # volumes:
+    #   - ./minio/data:/data
+
+  cache:
+    container_name: "redis"
+    image: redis:7.4-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning
+    # environment:
+    #   - REDIS_PASSWORD: password
+    volumes:
+      - cache:/data
+
+  db:
+    container_name: "postgres"
+    image: postgres
+    restart: always
+    environment:
+      PGDATA: /data
+      POSTGRES_USER: daudalearning
+      POSTGRES_DB: database
+      # POSTGRES_MULTIPLE_DATABASES: app,hackathon
+      POSTGRES_PASSWORD: password
+    healthcheck:
+      # test: ["CMD-SHELL", "pg_isready -U openhack -d database"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    # volumes:
+    #   - ./scripts/databases.sh:/docker-entrypoint-initdb.d/databases.sh
+    ports:
+      - "5432:5432"
+
+volumes:
+  cache:
+    driver: local
+  database:
+    driver: local
+  s3:
+    driver: local

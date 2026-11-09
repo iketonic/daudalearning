@@ -1,0 +1,40 @@
+model Organisations {
+    id               String @id @unique @default(uuid(4))
+    name             String
+    contactEmail     String @map("contact_email")
+    organisationType String @map("organisation_type")
+    
+    memberGroups OrganisationMemberGroups[]
+
+    @@map("organisations")
+}
+
+model OrganisationGroupPolicies {
+    id                 String  @id @default(uuid(4))
+    isAdmin            Boolean @map("group_admin")         @default(false)
+    editQuestions      Boolean @map("remove_questions")    @default(false)
+    seeQuestions       Boolean @map("see_questions")       @default(false)
+    editOrganisation   Boolean @map("edit_organisation")   @default(false)
+    deleteOrganisation Boolean @map("delete_organisation") @default(false)
+    manageHackathons   Boolean @map("manage_hackathons")   @default(false)
+    joinHackathons     Boolean @map("join_hackathons")     @default(false)
+    manageMembers      Boolean @map("remove_members")      @default(false)
+
+    groups OrganisationMemberGroups[]
+
+    @@map("ogranisation_group_permissions")
+}
+
+model OrganisationMemberGroups {
+    id             String @id @default(uuid(4))
+    groupName      String @map("group_name")
+    policyID       String @map("policy_id")
+    organisationId String @map("organisation_id")
+
+    policy  OrganisationGroupPolicies @relation(references: [id], fields: [policyID], onDelete: NoAction)
+    members User[]
+
+    organisation Organisations @relation(references: [id], fields: [organisationId], onDelete: Cascade)
+
+    @@map("organisation_member_groups")
+}

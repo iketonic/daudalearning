@@ -1,0 +1,2 @@
+# Hello, this is the source code for my Computer Science NEA Project!
+This was written in Typescript (i will never ever subject myself to the hands of Python). I won't share my NEA Document, but still feel free to look around at the logic within the project :)

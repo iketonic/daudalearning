@@ -1,0 +1,49 @@
+model Account {
+    id                 String  @id @default(uuid(4))
+    userId             String  @map("user_id")
+    provider           String
+    providerAccountId  String  @map("provider_account_id")
+    
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    
+    @@unique([providerAccountId])
+    @@map("accounts")
+}
+
+// Strictly for authentication
+model User {
+    id             String    @unique @id @default(uuid(4))
+    name           String
+    email          String    @unique 
+    password       String?   
+    emailVerified  DateTime? @map("email_verified")
+    lastLogin      DateTime  @default(now()) @map("last_login")
+    role           UserRole  @default(user)
+    disabled       Boolean   @default(false)
+    newUser        Boolean   @default(true) @map("new_user")
+    organisationid String?   @map("organisation_id")
+
+    // Settings
+
+    
+    accounts    Account[]
+
+    organisation OrganisationMemberGroups? @relation(fields: [organisationid], references: [id])
+
+    @@map("users")
+}
+
+// User Types
+enum UserType {
+    student
+    teacher
+    unaffiliated
+}
+
+// Diffferent availiable roles
+enum UserRole {
+    sudo
+    admin
+    moderator
+    user
+}
