@@ -16,7 +16,7 @@
     "removeComments": true,
     "strictPropertyInitialization": false,
     "paths": {
-      "@": ["./"]
+      "@/*": ["./src/*"]
     },
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
