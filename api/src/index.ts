@@ -3,6 +3,7 @@ import { createServer } from 'http';
 import logger from './logger';
 import cors, { CorsOptions } from 'cors';
 import cookieParser from 'cookie-parser';
+import onFinished from "on-finished";
 
 const app = express();
 const server = createServer(app);
@@ -16,10 +17,12 @@ const corsOptions: CorsOptions = {
     credentials: true
 }
 
-if (process.env.NODE_ENV === "development") app.use(async (req, res, next) => {
-    logger.info(`${req.method} ${req.url}`);
-    if (req.body) logger.info(req.body)
-    return next();
+app.use(async (req, res, next) => {
+    const start = Date.now();
+    onFinished(res, (err, msg) => {
+        logger.info(`${req.method} ${req.url} ${res.statusCode} in ${Date.now() - start}ms`);
+    })    
+    next();
 });
 
 // Cookie parser
