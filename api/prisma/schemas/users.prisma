@@ -22,15 +22,26 @@ model User {
     disabled       Boolean   @default(false)
     newUser        Boolean   @default(true) @map("new_user")
     organisationid String?   @map("organisation_id")
-
+ 
     // Settings
-
+ 
     
-    accounts    Account[]
-
+    accounts Account[]
+    profile Profile?
+ 
     organisation OrganisationMemberGroups? @relation(fields: [organisationid], references: [id])
-
+ 
     @@map("users")
+}
+
+model Profile {
+    id       String @id
+    
+    image    String
+    username String @unique
+    type     UserType
+ 
+    user User @relation(fields: [id], references: [id])
 }
 
 // User Types
