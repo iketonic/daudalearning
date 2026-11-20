@@ -7,12 +7,11 @@
   "scripts": {
     "start": "node -r dotenv/config dist/index.js",
     "build": "tsc && babel src --extensions .ts --out-dir dist --copy-files",
-    "dev": "node  --import tsx/cjs -r dotenv/config src/index.ts | npx pino-pretty",
+    "dev": "node --watch-path=./src --watch-preserve-output --import tsx/cjs -r dotenv/config src/index.ts | npx pino-pretty",
     "studio": "prisma studio",
     "generate": "prisma generate",
     "seed": "prisma db seed",
-    "push": "prisma db push --force-reset",
-    "contract:emit": "prisma contract emit"
+    "push": "prisma db push --force-reset"
   },
   "author": "Ikechukwu",
   "license": "MIT",
@@ -32,7 +31,6 @@
     "@types/pg": "^8.23.1",
     "@types/ws": "^8.18.1",
     "babel-plugin-module-resolver": "^5.0.3",
-    "nodemon": "^3.1.14",
     "prisma": "^7.10.1",
     "tsx": "^4.23.12"
   },
