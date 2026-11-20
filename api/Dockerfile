@@ -1,16 +1,16 @@
-FROM node:slim AS base
+FROM node:26.13.0-alpine AS base
 
 FROM base AS builder
 WORKDIR /usr/app
 RUN apt-get update -y && apt-get install -y openssl
-COPY --chown=node:node package*.json tsconfig.json babel.config.js prisma.config.ts ./
+COPY --chown=node:node package*.json tsconfig.json babel.config.json prisma.config.ts ./
 COPY --chown=node:node /src ./src
 COPY --chown=node:node /prisma ./prisma
 ENV DATABASE_URL=""
-RUN npm ci --silent
+RUN npm i --force
 RUN npx prisma generate
 RUN npm run build
-RUN npm ci --silent --omit=dev
+RUN npm ci --force --silent --omit=dev
 
 FROM base AS runner
 WORKDIR /usr/app
