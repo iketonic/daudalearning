@@ -1,6 +1,5 @@
 import { Router } from "express";
-import session from "../session.controller";
-import loginController from "./login.controller";
+import loginController from "../controllers/auth/login";
 
 const route = Router()
 

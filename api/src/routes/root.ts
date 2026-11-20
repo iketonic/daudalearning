@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import auth from './auth/auth.route'
-import session from "./session.controller";
+import auth from './auth'
+import session from "../controllers/session";
 
 const route = Router()
 
